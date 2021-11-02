@@ -26,4 +26,6 @@ yarn start
 
 
 ## 상품 필터
-<img width="959" alt="product" src="https://user-images.githubusercontent.com/80678739/139871231-b4848e57-598c-4637-a6bc-b06683210fc1.png">
+<img width="959" alt="product" src="https://user-images.githubusercontent.com/80678739/139871231-b4848e57-598c-4637-a6bc-b06683210fc1.png" >
+
+
