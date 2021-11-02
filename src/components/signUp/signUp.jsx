@@ -60,12 +60,13 @@ const SignUpPage = ( {history} ) => {
     setInputs(e.target.value)
     setInputs({...inputs, [e.target.name]: e.target.value })
   }
-const onClickSubmit = () => {
+const onClickSubmit = (data) => {
+  console.log(data)
   axios.post('http://ec2-3-37-62-104.ap-northeast-2.compute.amazonaws.com/user/sign_up/', {
-    phone_number: inputs.phone,
-    password: inputs.password,
-    auth_number: inputs.sms,
-    email: inputs.email,
+    phone_number: data.phone,
+    password: data.password,
+    auth_number: data.sms,
+    email: data.email,
     // photo: imgUrl.toString()
     
   })
@@ -101,21 +102,23 @@ const onClickSMS = async () => {
         </SMSWrapper>
         <ErrorMsg>{formState.errors.phone?.message}</ErrorMsg>
         <SMSWrapper>
-          <InputSMS name="sms" placeholder="승인번호"  {...register("sms")} onChange={onChangeInputs}/>
+          <InputSMS name="sms" placeholder="승인번호" {...register("sms")} onChange={onChangeInputs}/>
           
-          { isAuth ?
-            <SMSBtn type="button" isAuth={isAuth}>인증성공</SMSBtn> : <SMSBtn type="button" onClick={onClickSMS}>인증하기</SMSBtn>}
+          { isAuth ?<SMSBtn type="button" isAuth={isAuth}>인증성공</SMSBtn> 
+            : 
+            <SMSBtn type="button" onClick={onClickSMS}>인증하기</SMSBtn>}
         </SMSWrapper>
-        
         <ErrorMsg>{formState.errors.sms?.message}</ErrorMsg>
-        <InputPassword name="email" placeholder="이메일"  {...register("email")} onChange={onChangeInputs}/>
+        <InputPassword name="email" placeholder="이메일" {...register("email")} onChange={onChangeInputs}/>
         <ErrorMsg>{formState.errors.email?.message}</ErrorMsg>
         <InputPassword name="password" type="password" placeholder="비밀번호" {...register("password")} onChange={onChangeInputs} />
         <ErrorMsg>{formState.errors.password?.message}</ErrorMsg>
         <ProfileWrapper >
         <ProfileTitle>프로필 이미지</ProfileTitle>
-          {imgUrl ? <img src={imgUrl} alt="" style={{width:80}}/> :
-            <ProfilePhoto onClick={onclickBox}>+</ProfilePhoto>
+          {imgUrl ? 
+          <img src={imgUrl} alt="" style={{width:80}}/> 
+          :
+          <ProfilePhoto onClick={onclickBox}>+</ProfilePhoto>
           }
           
           <Image type="file" ref={fileRef} onChange={onChangeFile} accept="image/*"/>

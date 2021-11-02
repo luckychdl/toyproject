@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { schemaLogin } from "../../commons/yup.validation"
 import { yupResolver } from "@hookform/resolvers/yup"
@@ -16,34 +16,60 @@ import {
   ErrorMessage
 } from "./signIn.styles"
 import axios from "axios"
+import { GlobalContext } from "../../App"
 
-
+const JWT_EXPIRY_TIME = 24 * 3600 * 1000;
 const SignInPage = ({history}) => {
+  const {accessToken, setAccessToken, refreshToken, setRefreshToken} = useContext(GlobalContext)
+  
   const {register, handleSubmit, formState} = useForm({
     mode:"onChange",
     resolver:yupResolver(schemaLogin)
   })
-  const [loginId, setLoginId] = useState("")
-  const [password, setPassword] = useState("")
-  const onChangeId = (e) => {
-    setLoginId(e.target.value)
-  }
-  const onChangePassword = (e) => {
-    setPassword(e.target.value)
-  }
+
+  
   const onclickMoveSignUp = () => {
     history.push("/signUp")
   }
   const onClickMovePW = () => {
     history.push("/updatePW")
   }
-  const getToken = () => {
-    axios.post("http://ec2-3-37-62-104.ap-northeast-2.compute.amazonaws.com/user/token/", {
-      phone_number: loginId ,
-      password: password
+  const getToken =  (data) => {
+   axios.post("http://ec2-3-37-62-104.ap-northeast-2.compute.amazonaws.com/user/token/", {
+      phone_number: data.phone ,
+      password: data.password,
     })
-    history.push("/main")
+    .then(onLoginSuccess)
+    .catch(err => {
+      console.log(err.message)
+    })
   }
+  const onLoginSuccess = (res) => {
+    const accessToken = res.data.access
+    setRefreshToken(res.data.refresh)
+    axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`
+    axios.post("http://ec2-3-37-62-104.ap-northeast-2.compute.amazonaws.com/user/token/verify/", {
+      token: accessToken,
+    })
+    .then(history.push("/main"))
+    .catch(err => {
+      console.log(err.message)
+    })
+    setTimeout(getRefresh, JWT_EXPIRY_TIME - 60000)
+  }
+  const getRefresh = () => {
+    axios.post("http://ec2-3-37-62-104.ap-northeast-2.compute.amazonaws.com/user/token/refresh/", {
+      token: refreshToken,
+    })
+    .then((res)=> setAccessToken(res))
+    .catch(err => {
+      console.log(err.message)
+    })
+  }
+  useEffect(()=>{
+    getRefresh()
+    console.log(refreshToken)
+  })
   return (
     <form onSubmit={handleSubmit(getToken)}>
     <SignInMain>
@@ -52,13 +78,13 @@ const SignInPage = ({history}) => {
         <LogIn>로그인</LogIn>
         <InputId placeholder="전화번호" 
         {...register("phone")}
-        onChange={onChangeId}
+        // onChange={onChangeId}
         />
         <ErrorMessage>{formState.errors.phone?.message}</ErrorMessage>
         <InputPassword placeholder="비밀번호" 
         type="password"
         {...register("password")}
-        onChange={onChangePassword}
+        // onChange={onChangePassword}
         />
         <ErrorMessage>{formState.errors.password?.message}</ErrorMessage>
         <LogInBtn isActive={formState.isValid}>로그인</LogInBtn>

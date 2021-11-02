@@ -5,7 +5,13 @@ export const Title = styled.div`
   font-size: 30px;
   font-weight: 900;
   text-align: center;
-  padding: 30px;
+  padding: 50px 0 15px 0;
+`
+export const Answer = styled.div`
+  font-size: 20px;
+  font-weight: 500;
+  text-align: center;
+  padding-bottom: 20px;
 `
 export const CardUI = styled.div `
   display: flex;
@@ -27,7 +33,7 @@ export const List = styled(Card)`
   flex-grow: 0;
   font-size: 16px;
   font-weight: 700;
-  /* background-color: black; */
+  background-color: #95f7ab;
   
   
 `
@@ -45,12 +51,30 @@ export const Wrapper = styled.div`
 `
 export const MainWrapper = styled.div`
   width:100%;
-  height: 100vh;
-  background-color: #2bef57;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  min-height: 100vh;
+  background-color: #d4fbdd;
   background-attachment: scroll;
-  @media (max-width: 798px) {
+  @media (max-width: 380px) {
     height: 100%;
-    background-color: #2bef57;
+    display: flex;
+    flex-direction: column;
+    background-color: #d4fbdd;
     background-attachment: scroll;
   }
+`
+export const SubmitBtn = styled.button`
+  background-color: black;
+  font-weight: 700;
+  color: #FFFFFF;
+  border:none;
+  border-radius: 5px;
+  width: 150px;
+  height: 50px;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  cursor: pointer;
 `
