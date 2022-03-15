@@ -12,7 +12,6 @@ yarn start
 ## 로그인 기능
 <img width="986" alt="login" src="https://user-images.githubusercontent.com/80678739/139871076-0d012511-2e65-4395-a60c-149d0b394929.png">
 
-
 ## 회원가입 기능
 <img width="949" alt="signin" src="https://user-images.githubusercontent.com/80678739/139871039-70fa3c20-6f3c-45e9-820e-b49f7cedc30e.png">
 
